@@ -1037,10 +1037,16 @@
           })
         });
         const data = await response.json();
+        
+        if (!response.ok) {
+          console.error("Gemini API Error Response:", data);
+          return `API 오류가 발생했습니다: ${data.error?.message || response.statusText} (키가 유효한지 확인해주세요)`;
+        }
+        
         return data.candidates[0].content.parts[0].text;
       } catch (error) {
-        console.error("Gemini API Error:", error);
-        return "오류가 발생했습니다. API 키나 네트워크 상태를 확인해주세요.";
+        console.error("Gemini API Request Error:", error);
+        return `요청 중 오류가 발생했습니다: ${error.message}`;
       }
     }
 
