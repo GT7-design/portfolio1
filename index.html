@@ -695,12 +695,19 @@
         <div class="section-title">조퇴·외출증 발급</div>
         <div class="form-grid">
           <div class="field">
-            <label>학생 이름</label>
+            <label>대상 구분</label>
+            <select id="targetType">
+              <option value="학생">학생</option>
+              <option value="교직원">교직원</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>이름</label>
             <input id="studentName" type="text" placeholder="예: 홍길동">
           </div>
           <div class="field">
-            <label>학급</label>
-            <input id="studentClass" type="text" placeholder="예: 6학년 2반">
+            <label>소속/학급</label>
+            <input id="studentClass" type="text" placeholder="예: 6학년 2반, 또는 교무실">
           </div>
           <div class="field">
             <label>신청 유형</label>
@@ -912,6 +919,7 @@
     }
 
     window.issuePass = async function () {
+      const targetType = document.getElementById("targetType").value;
       const name = document.getElementById("studentName").value.trim();
       const cls = document.getElementById("studentClass").value.trim();
       const type = document.getElementById("requestType").value;
@@ -929,6 +937,7 @@
         // Firestore에 데이터 추가
         const docRef = await addDoc(collection(db, "passes"), {
           passNo,
+          targetType,
           name,
           cls,
           type,
@@ -947,7 +956,8 @@
           <div class="pass-title">서울풍납초등학교 디지털 패스</div>
           <div class="pass-details">
             <strong>발급번호:</strong> ${passNo}<br>
-            <strong>학생정보:</strong> ${name} (${cls})<br>
+            <strong>대상구분:</strong> ${targetType}<br>
+            <strong>이름(소속):</strong> ${name} (${cls})<br>
             <strong>신청유형:</strong> ${type}<br>
             <strong>요청시간:</strong> ${time.replace("T", " ")}<br>
             <strong>신청사유:</strong> ${reason}
@@ -984,14 +994,17 @@
         ul.innerHTML = "<li>아직 발급 기록이 없습니다. (혹은 Firestore 규칙 설정 필요)</li>";
         return;
       }
-      ul.innerHTML = historyList.map(item => `
+      ul.innerHTML = historyList.map(item => {
+        const targetTypeStr = item.targetType ? `[${item.targetType}] ` : "";
+        return `
         <li>
-          <strong>${item.passNo}</strong> · ${item.name} (${item.cls}) · ${item.type}
+          <strong>${item.passNo}</strong> · ${targetTypeStr}${item.name} (${item.cls}) · ${item.type}
           ${item.isPrinted ? '<span class="pill" style="padding:2px 8px; font-size:11px; margin-left:6px; background:#dcfce7; color:#166534; border:1px solid #bbf7d0;">출력완료</span>' : ''}<br>
           ${item.time ? item.time.replace("T", " ") : ""}<br>
           <span style="color:#64748b;">${item.reason}</span>
         </li>
-      `).join("");
+      `;
+      }).join("");
     }
 
     let chatInitialized = false;
