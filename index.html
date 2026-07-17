@@ -586,6 +586,19 @@
     alert("로그인 중 오류가 발생했습니다: " + error.message);
   }
 }
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    document.getElementById("loginScreen").classList.add("hidden");
+    document.getElementById("appScreen").classList.remove("hidden");
+    document.getElementById("userPill").textContent = `인증 계정: ${user.email}`;
+  } else {
+    document.getElementById("appScreen").classList.add("hidden");
+    document.getElementById("loginScreen").classList.remove("hidden");
+  }
+});
+async function logout() {
+  await auth.signOut();
+}
 
 
     function logout(){
@@ -615,17 +628,66 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
     }
 
-    function issuePass(){
-      const name = document.getElementById("studentName").value.trim();
-      const cls = document.getElementById("studentClass").value.trim();
-      const type = document.getElementById("requestType").value;
-      const time = document.getElementById("requestTime").value;
-      const reason = document.getElementById("requestReason").value.trim();
+async function issuePass() {
+  const name = document.getElementById("studentName").value.trim();
+  const cls = document.getElementById("studentClass").value.trim();
+  const type = document.getElementById("requestType").value;
+  const time = document.getElementById("requestTime").value;
+  const reason = document.getElementById("requestReason").value.trim();
 
-      if(!name || !cls || !time || !reason){
-        alert("모든 항목을 입력해주세요.");
-        return;
-      }
+  if (!name || !cls || !time || !reason) {
+    alert("모든 항목을 입력해주세요.");
+    return;
+  }
+
+  const user = auth.currentUser;
+  if (!user) {
+    alert("먼저 로그인해주세요.");
+    return;
+  }
+
+  const passNo = "PN-" + Date.now().toString().slice(-8);
+
+  await db.collection("portfolio1_passes").add({
+    passNo: passNo,
+    studentName: name,
+    studentClass: cls,
+    requestType: type,
+    requestTime: time,
+    reason: reason,
+    createdBy: user.email,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  alert("발급 및 저장이 완료되었습니다.");
+}
+
+async function loadPassHistory() {
+  const snapshot = await db
+    .collection("portfolio1_passes")
+    .orderBy("createdAt", "desc")
+    .limit(10)
+    .get();
+
+  const list = document.getElementById("historyList");
+
+  if (snapshot.empty) {
+    list.innerHTML = "<li>아직 발급 기록이 없습니다.</li>";
+    return;
+  }
+
+  list.innerHTML = snapshot.docs.map(doc => {
+    const d = doc.data();
+    return `
+      <li>
+        <strong>${d.passNo}</strong> · ${d.studentName} (${d.studentClass}) · ${d.requestType}<br>
+        ${d.requestTime}<br>
+        <span style="color:#64748b;">${d.reason}</span>
+      </li>
+    `;
+  }).join("");
+}
+
 
       const passNo = "PN-" + Date.now().toString().slice(-8);
       const item = { passNo, name, cls, type, time, reason, createdAt: new Date().toLocaleString("ko-KR") };
