@@ -6,489 +6,694 @@
   <title>서울풍납초등학교 스마트 조퇴·외출증</title>
   <style>
     :root{
-      --primary:#2563eb;
-      --bg:#f4f7fb;
+      --primary:#1d4ed8;
+      --primary-2:#2563eb;
+      --accent:#d946ef;
+      --bg:#f6f9ff;
       --card:#ffffff;
-      --line:#dbe4ee;
-      --text:#1f2937;
+      --line:#dbe4f0;
+      --text:#0f172a;
       --muted:#64748b;
     }
     *{box-sizing:border-box}
-    body{margin:0;font-family:Pretendard,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    body{
+      margin:0;
+      font-family: "Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(37,99,235,.16), transparent 26%),
+        radial-gradient(circle at 90% 0%, rgba(217,70,239,.12), transparent 22%),
+        linear-gradient(180deg, #f7faff 0%, #eef4ff 54%, #ffffff 100%);
+      min-height:100vh;
+      position:relative;
+      overflow-x:hidden;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background-image:
+        linear-gradient(rgba(29,78,216,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(29,78,216,.05) 1px, transparent 1px);
+      background-size:34px 34px;
+      pointer-events:none;
+      mask-image:linear-gradient(to bottom, rgba(0,0,0,.9), rgba(0,0,0,.25));
+    }
     .hidden{display:none !important}
-    .auth{min-height:100vh;display:grid;place-items:center;padding:24px}
-    .auth-box,.card{background:#fff;border:1px solid var(--line);border-radius:18px}
-    .auth-box{width:min(520px,100%);padding:32px;text-align:center}
-    .logo{width:78px;height:78px;object-fit:contain;margin-bottom:10px}
-    .btn{border:0;border-radius:12px;padding:12px 16px;cursor:pointer;font-weight:700}
-    .btn.primary{background:var(--primary);color:#fff}
-    .btn.secondary{background:#eef2ff;color:var(--primary)}
-    .auth p{color:var(--muted);line-height:1.6}
-    .app{max-width:1200px;margin:0 auto;padding:20px}
-    .header{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:16px}
-    .brand{display:flex;gap:14px;align-items:center}
-    .brand h1{margin:0;font-size:28px}
-    .brand p{margin:4px 0 0;color:#475569}
-    .userbox{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .badge{display:inline-block;background:#eff6ff;color:var(--primary);padding:4px 8px;border-radius:999px;font-size:12px;font-weight:700}
-    .grid{display:grid;gap:16px}
-    .hero{padding:20px}
-    .hero h2{margin:0 0 10px}
-    .hero p{margin:0;color:#475569;line-height:1.7}
-    .mini-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:16px}
-    .mini-card{padding:14px;border:1px solid var(--line);border-radius:14px;background:#f8fbff}
-    .mini-card strong{display:block;margin-bottom:8px}
-    .mini-card a{color:var(--primary);word-break:break-all}
-    details.card{padding:14px}
-    details summary{cursor:pointer;font-weight:700}
-    .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
-    .feature-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}
-    .form-card,.chat-card{padding:18px}
-    .section-title{margin:0 0 14px}
-    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-    .field label{display:block;font-weight:700;margin:0 0 6px}
-    input,textarea,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit}
-    textarea{min-height:100px;resize:vertical}
-    .result{margin-top:14px;padding:14px;border-radius:14px;background:#eff6ff;border:1px solid #bfd4ff}
-    .history{margin-top:18px}
-    .history ul{list-style:none;padding:0;margin:0}
-    .history li{padding:12px;border-bottom:1px solid var(--line);line-height:1.5}
-    .chat-log{height:360px;overflow:auto;border:1px solid var(--line);border-radius:14px;padding:12px;background:#f8fafc}
-    .msg{padding:10px 12px;border-radius:12px;max-width:88%;margin-bottom:10px;line-height:1.5}
-    .msg.me{background:#dbeafe;margin-left:auto}
-    .msg.bot{background:#f1f5f9}
-    .msg small{display:block;color:#64748b;margin-top:6px}
-    .chat-row{display:flex;gap:8px;margin-top:10px}
-    footer{margin:20px 0 32px;text-align:center;color:#475569;font-size:14px}
-    @media (max-width: 900px){
-      .feature-grid{grid-template-columns:1fr}
-      .form-grid{grid-template-columns:1fr}
-      .header{flex-direction:column;align-items:flex-start}
+
+    .login-wrap{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .login-card{
+      width:min(560px,100%);
+      background:rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:34px;
+      position:relative;
+      overflow:hidden;
+      box-shadow:0 20px 50px rgba(37,99,235,.08);
+    }
+    .login-card::after{
+      content:"";
+      position:absolute;
+      right:-40px;
+      top:-40px;
+      width:180px;
+      height:180px;
+      background:radial-gradient(circle, rgba(217,70,239,.18), transparent 70%);
+    }
+    .logo{
+      width:96px;
+      height:96px;
+      object-fit:contain;
+      display:block;
+      margin:0 auto 14px;
+      border-radius:24px;
+      background:#fff;
+      border:1px solid #e8edf7;
+      padding:8px;
+    }
+    h1,h2,h3,p{margin:0}
+    .login-title{
+      text-align:center;
+      font-size:30px;
+      font-weight:800;
+      letter-spacing:-.02em;
+      margin-bottom:8px;
+    }
+    .login-sub{
+      text-align:center;
+      color:var(--muted);
+      line-height:1.65;
+      margin-bottom:24px;
+    }
+    .school-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:#eef4ff;
+      color:var(--primary);
+      font-size:13px;
+      font-weight:700;
+      border:1px solid #d7e4ff;
+      margin:0 auto 16px;
+    }
+    .center{display:flex;justify-content:center}
+    .field{margin-bottom:12px}
+    .field label{
+      display:block;
+      margin-bottom:6px;
+      font-size:14px;
+      font-weight:700;
+    }
+    input,select,textarea,button{
+      font:inherit;
+    }
+    input,select,textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:13px 14px;
+      background:#fff;
+      color:var(--text);
+    }
+    textarea{resize:vertical; min-height:100px}
+    .btn{
+      border:0;
+      border-radius:14px;
+      padding:13px 16px;
+      cursor:pointer;
+      font-weight:800;
+      transition:.2s ease;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      color:#fff;
+    }
+    .btn-light{
+      background:#f8fbff;
+      color:var(--primary);
+      border:1px solid #d9e7ff;
+    }
+    .login-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:8px;
+    }
+    .notice{
+      margin-top:14px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:#f8fbff;
+      border:1px solid #e2ebfb;
+      color:#475569;
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    .app{
+      max-width:1280px;
+      margin:0 auto;
+      padding:24px 18px 40px;
+    }
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      margin-bottom:18px;
+      flex-wrap:wrap;
+    }
+    .brand{
+      display:flex;
+      gap:14px;
+      align-items:center;
+    }
+    .brand-logo{
+      width:76px;
+      height:76px;
+      object-fit:contain;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:6px;
+    }
+    .brand h2{
+      font-size:28px;
+      font-weight:900;
+      letter-spacing:-.02em;
+      margin-bottom:5px;
+    }
+    .brand p{
+      color:#475569;
+      line-height:1.5;
+      font-size:14px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:10px 12px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:700;
+      color:#334155;
+    }
+    .hero{
+      position:relative;
+      overflow:hidden;
+      background:rgba(255,255,255,.88);
+      backdrop-filter: blur(10px);
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:26px;
+      margin-bottom:18px;
+      box-shadow:0 20px 40px rgba(37,99,235,.06);
+    }
+    .hero::before{
+      content:"";
+      position:absolute;
+      right:-60px;
+      top:-60px;
+      width:260px;
+      height:260px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(217,70,239,.14), transparent 70%);
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:18px;
+      align-items:center;
+    }
+    .hero h3{
+      font-size:34px;
+      line-height:1.2;
+      letter-spacing:-.03em;
+      margin-bottom:12px;
+    }
+    .hero p{
+      color:#475569;
+      line-height:1.75;
+      font-size:15px;
+    }
+    .hero-mark{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+    .hero-mark img{
+      width:min(240px,80%);
+      max-height:240px;
+      object-fit:contain;
+      filter:drop-shadow(0 18px 32px rgba(29,78,216,.14));
+    }
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-bottom:18px;
+    }
+    .card{
+      background:rgba(255,255,255,.9);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:18px;
+    }
+    .card-title{
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:8px;
+      font-weight:700;
+    }
+    .card-value{
+      font-size:15px;
+      font-weight:800;
+      line-height:1.55;
+      word-break:break-all;
+    }
+    .card-value a{
+      color:var(--primary);
+      text-decoration:none;
+    }
+
+    .content{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:18px;
+    }
+    .section-title{
+      font-size:22px;
+      font-weight:900;
+      margin-bottom:14px;
+      letter-spacing:-.02em;
+    }
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    .result{
+      margin-top:14px;
+      border-radius:18px;
+      border:1px solid #cfe0ff;
+      background:#eff6ff;
+      padding:16px;
+      display:none;
+    }
+    .qr-box{
+      margin-top:12px;
+      height:120px;
+      border-radius:16px;
+      border:1px dashed #93c5fd;
+      background:
+        linear-gradient(45deg, rgba(37,99,235,.06) 25%, transparent 25%, transparent 50%, rgba(37,99,235,.06) 50%, rgba(37,99,235,.06) 75%, transparent 75%, transparent);
+      background-size:18px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:14px;
+      font-weight:800;
+      color:var(--primary);
+    }
+    .history-list{
+      list-style:none;
+      padding:0;
+      margin:14px 0 0;
+    }
+    .history-list li{
+      padding:12px 0;
+      border-bottom:1px solid #e8eef8;
+      line-height:1.6;
+      font-size:14px;
+    }
+    .chat-box{
+      border:1px solid #e4ebf6;
+      background:#f8fbff;
+      border-radius:18px;
+      padding:12px;
+      height:360px;
+      overflow:auto;
+    }
+    .chat-msg{
+      max-width:88%;
+      padding:12px 14px;
+      border-radius:16px;
+      margin-bottom:10px;
+      line-height:1.6;
+      font-size:14px;
+    }
+    .chat-ai{
+      background:#eef4ff;
+      border:1px solid #d9e7ff;
+    }
+    .chat-user{
+      background:#fdf2f8;
+      border:1px solid #f5d0fe;
+      margin-left:auto;
+    }
+    .chat-row{
+      display:grid;
+      grid-template-columns:1fr 110px;
+      gap:10px;
+      margin-top:12px;
+    }
+    .small{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:10px;
+      line-height:1.5;
+    }
+    @media (max-width: 1080px){
+      .cards{grid-template-columns:repeat(2,1fr)}
+      .content{grid-template-columns:1fr}
+      .hero-grid{grid-template-columns:1fr}
+    }
+    @media (max-width: 720px){
+      .form-grid,.login-actions,.chat-row{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr}
+      .brand{align-items:flex-start}
+      .brand h2{font-size:24px}
+      .hero h3{font-size:28px}
     }
   </style>
 </head>
 <body>
-  <div id="authScreen" class="auth">
-    <div class="auth-box">
-      <img src="logo.png" alt="서울풍납초등학교 로고" class="logo" onerror="this.style.display='none'">
-      <h1>서울풍납초등학교 스마트 조퇴·외출증</h1>
-      <p>
-        소속학교: 서울풍납초등학교<br>
-        작성자: 교사 김규태
-      </p>
-      <p>
-        이 사이트는 교사 개발자 포트폴리오 제출용 시연 서비스입니다.<br>
-        학교/교육청 Google 계정 인증 후 사용할 수 있도록 설계했습니다.
-      </p>
-      <button id="loginBtn" class="btn primary">Google 계정으로 인증하고 입장</button>
-      <p style="margin-top:12px;font-size:14px;">
-        Firebase 설정이 없으면 시연 모드로 열립니다.<br>
-        실제 제출용으로는 Firebase + Vercel 배포까지 완료해야 합니다.
-      </p>
+  <div id="loginScreen" class="login-wrap">
+    <div class="login-card">
+      <img id="loginLogo" class="logo" alt="풍납초 로고">
+      <div class="center"><div class="school-chip">서울풍납초등학교 · 교직원 인증 화면</div></div>
+      <div class="login-title">스마트 조퇴·외출증 자동 발급</div>
+      <div class="login-sub">
+        서울풍납초등학교 교사 <strong>김규태</strong> 포트폴리오 1<br>
+        학교 구성원이 구글 계정으로 인증해 사용하는 형태를 가정한 시연용 화면입니다.
+      </div>
+
+      <div class="field">
+        <label for="loginEmail">Google 계정 이메일</label>
+        <input id="loginEmail" type="email" placeholder="예: teacher@sen.go.kr">
+      </div>
+
+      <div class="login-actions">
+        <button class="btn btn-primary" onclick="login()">Google 계정으로 인증</button>
+        <button class="btn btn-light" onclick="fillDemo()">시연용 계정 자동 입력</button>
+      </div>
+
+      <div class="notice">
+        허용 예시 도메인: <strong>@sen.go.kr</strong>, <strong>@school.kr</strong>, <strong>@edu.sen.go.kr</strong><br>
+        실제 Google OAuth를 붙이지 않은 복붙용 버전이며, 제출용 시연 페이지로 바로 사용할 수 있도록 구성했습니다.
+      </div>
     </div>
   </div>
 
-  <div id="appShell" class="app hidden">
-    <div class="header">
+  <div id="appScreen" class="app hidden">
+    <div class="topbar">
       <div class="brand">
-        <img src="logo.png" alt="서울풍납초등학교 로고" class="logo" onerror="this.style.display='none'">
+        <img id="brandLogo" class="brand-logo" alt="풍납초 로고">
         <div>
-          <span class="badge">소속학교: 서울풍납초등학교</span>
-          <h1>스마트 조퇴·외출증 자동 발급</h1>
-          <p>작성자: 서울풍납초등학교 교사 김규태</p>
+          <h2>서울풍납초등학교 스마트 조퇴·외출증</h2>
+          <p>작성자: 서울풍납초등학교 교사 김규태<br>교직원 인증 후 학생 조퇴·외출 기록을 간편하게 발급·관리하는 서비스</p>
         </div>
       </div>
-      <div class="userbox">
-        <span id="backendBadge" class="badge">백엔드 확인 중</span>
-        <span id="userInfo" class="badge">로그인 정보 없음</span>
-        <button id="logoutBtn" class="btn secondary">로그아웃</button>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <div class="pill" id="userPill">로그인 전</div>
+        <button class="btn btn-light" onclick="logout()">로그아웃</button>
       </div>
     </div>
 
-    <section class="card hero">
-      <h2>서비스 소개</h2>
-      <p>
-        학생의 조퇴·외출 요청을 디지털 방식으로 접수하고, 승인 이후 발급 내역을 기록하는 서비스입니다.
-        학교 현장의 행정 부담을 줄이고, 신청-확인-기록 과정을 한 화면에서 처리하는 것을 목표로 했습니다.
-      </p>
-      <div class="mini-grid">
-        <div class="mini-card">
-          <strong>GitHub 레포지토리 주소</strong>
-          <a id="repoLink" href="#" target="_blank" rel="noopener"></a>
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <h3>반복 행정은 줄이고,<br>학생 안내는 더 빠르게</h3>
+          <p>
+            종이 조퇴증과 외출증 처리 과정은 반복적이고 누락 위험이 있습니다.
+            이 서비스는 학생 이름, 학급, 신청 유형, 시간, 사유를 한 번에 기록하고
+            즉시 발급 화면을 제공하여 학교 현장의 행정 흐름을 더 간단하고 명확하게 만드는 데 초점을 두었습니다.
+          </p>
         </div>
-        <div class="mini-card">
-          <strong>프론트엔드 웹주소</strong>
-          <a id="deployLink" href="#" target="_blank" rel="noopener"></a>
-        </div>
-        <div class="mini-card">
-          <strong>Firebase 백엔드</strong>
-          <span id="backendText"></span>
-        </div>
-        <div class="mini-card">
-          <strong>문의처</strong>
-          <span>서울풍납초등학교 교사 김규태 / 교내 문의</span>
+        <div class="hero-mark">
+          <img id="heroLogo" alt="풍납초 로고">
         </div>
       </div>
     </section>
 
-    <section class="info-grid" style="margin-top:16px;">
-      <details class="card" open>
-        <summary>개인정보처리방침</summary>
-        <p>
-          수집 항목: 로그인 계정 이름, 이메일, 학생 이름, 학급, 신청 유형, 신청 사유, 신청 일시.<br>
-          이용 목적: 조퇴·외출 요청 처리, 발급 이력 확인, 서비스 개선.<br>
-          보관 기간: 시연용 예시 기준 90일 보관 후 삭제.<br>
-          문의처: 서울풍납초등학교 교사 김규태.
-        </p>
-      </details>
-      <details class="card">
-        <summary>사용약관</summary>
-        <p>
-          본 서비스는 학교 업무 지원을 위한 시연용 서비스입니다.<br>
-          타인의 정보를 무단 입력하거나 허위 신청을 해서는 안 됩니다.<br>
-          서비스 장애, 정책 변경, 기능 수정이 있을 수 있으며 변경 내용은 화면에 공지합니다.
-        </p>
-      </details>
-      <details class="card">
-        <summary>사용방법 안내</summary>
-        <p>
-          1) Google 계정으로 로그인합니다.<br>
-          2) 학생 정보와 신청 내용을 입력합니다.<br>
-          3) 발급 버튼을 누르면 기록이 저장되고 최근 내역에 표시됩니다.<br>
-          4) 오른쪽 AI 도우미 창에서 사용법 질문을 할 수 있습니다.
-        </p>
-      </details>
-      <details class="card">
-        <summary>배포 완료 확인</summary>
-        <p>
-          □ 웹 접속이 정상인가<br>
-          □ GitHub 저장소가 공개 상태인가<br>
-          □ 개인정보처리방침/사용약관이 보이는가<br>
-          □ Google 로그인과 데이터 저장이 동작하는가<br>
-          □ 배포 URL과 저장소 URL이 모두 연결되는가
-        </p>
-      </details>
+    <section class="cards">
+      <div class="card">
+        <div class="card-title">소속학교 · 작성자</div>
+        <div class="card-value">서울풍납초등학교<br>교사 김규태</div>
+      </div>
+      <div class="card">
+        <div class="card-title">GitHub 레포지토리 주소</div>
+        <div class="card-value"><a id="repoLink" target="_blank"></a></div>
+      </div>
+      <div class="card">
+        <div class="card-title">배포 주소</div>
+        <div class="card-value"><a id="deployLink" target="_blank"></a></div>
+      </div>
+      <div class="card">
+        <div class="card-title">사용 안내</div>
+        <div class="card-value">교직원 인증 → 학생 정보 입력 → 발급 → 최근 기록 확인</div>
+      </div>
     </section>
 
-    <section class="feature-grid" style="margin-top:16px;">
-      <div class="card form-card">
-        <h2 class="section-title">조퇴·외출증 발급</h2>
+    <section class="content">
+      <div class="card">
+        <div class="section-title">조퇴·외출증 발급</div>
         <div class="form-grid">
           <div class="field">
-            <label for="studentName">학생 이름</label>
+            <label>학생 이름</label>
             <input id="studentName" type="text" placeholder="예: 홍길동">
           </div>
           <div class="field">
-            <label for="gradeClass">학급</label>
-            <input id="gradeClass" type="text" placeholder="예: 6학년 2반">
+            <label>학급</label>
+            <input id="studentClass" type="text" placeholder="예: 6학년 2반">
           </div>
           <div class="field">
-            <label for="requestType">신청 유형</label>
+            <label>신청 유형</label>
             <select id="requestType">
               <option value="외출">외출</option>
               <option value="조퇴">조퇴</option>
             </select>
           </div>
           <div class="field">
-            <label for="requestDate">신청 일시</label>
-            <input id="requestDate" type="datetime-local">
+            <label>요청 시간</label>
+            <input id="requestTime" type="datetime-local">
           </div>
         </div>
-        <div class="field" style="margin-top:12px;">
-          <label for="reason">사유</label>
-          <textarea id="reason" placeholder="예: 병원 진료, 보호자 동행"></textarea>
+        <div class="field">
+          <label>사유</label>
+          <textarea id="requestReason" placeholder="예: 병원 진료, 보호자 동행"></textarea>
         </div>
-        <div style="margin-top:12px;">
-          <button class="btn primary" onclick="issuePass()">패스 발급 및 저장</button>
-        </div>
-        <div id="passResult" class="result hidden"></div>
+        <button class="btn btn-primary" onclick="issuePass()">조퇴·외출증 발급</button>
 
-        <div class="history">
-          <h3>최근 발급 내역</h3>
-          <ul id="historyList"></ul>
-        </div>
+        <div id="issueResult" class="result"></div>
+
+        <div class="section-title" style="font-size:18px; margin-top:18px;">최근 발급 기록</div>
+        <ul id="historyList" class="history-list"></ul>
       </div>
 
-      <div class="card chat-card">
-        <h2 class="section-title">실시간 AI 도우미</h2>
-        <div id="chatLog" class="chat-log"></div>
+      <div class="card">
+        <div class="section-title">실시간 AI 도우미</div>
+        <div id="chatBox" class="chat-box"></div>
         <div class="chat-row">
-          <input id="chatInput" type="text" placeholder="예: 조퇴와 외출의 차이가 뭔가요?" onkeydown="if(event.key==='Enter'){sendHelperChat()}">
-          <button class="btn primary" onclick="sendHelperChat()">전송</button>
+          <input id="chatInput" type="text" placeholder="예: 외출과 조퇴의 차이는 무엇인가요?" onkeydown="if(event.key==='Enter'){sendChat()}">
+          <button class="btn btn-primary" onclick="sendChat()">전송</button>
+        </div>
+        <div class="small">
+          예시 질문: “발급 기록은 어디서 확인하나요?”, “조퇴와 외출의 차이는?”, “입력 항목은 무엇인가요?”
         </div>
       </div>
     </section>
-
-    <footer>
-      소속학교: 서울풍납초등학교 | 이름: 김규태 | GitHub 공개 저장소와 배포 URL을 포함한 포트폴리오 1
-    </footer>
   </div>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script>
-    const APP_INFO = {
-      repoUrl: "https://github.com/깃허브아이디/pungnap-portfolio-1",
-      deployUrl: "https://pungnap-portfolio-1.vercel.app",
-      allowedDomains: ["sen.go.kr", "school.kr"]
+    const CONFIG = {
+      SCHOOL: "서울풍납초등학교",
+      AUTHOR: "교사 김규태",
+      LOGO_URL: "https://images.wrks.ai/dalle/gnShJUSiEOpgut4YKCDQa7SBTtjlbc4ylN3xc9Cz.png",
+      GITHUB_USER: "kimgyutae",
+      REPO_NAME: "pungnap-portfolio-1",
+      DEPLOY_URL: "https://pungnap-portfolio-1.vercel.app",
+      ALLOWED_DOMAINS: ["sen.go.kr", "school.kr", "edu.sen.go.kr"]
     };
 
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT.firebasestorage.app",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID",
-      databaseURL: "https://YOUR_PROJECT-default-rtdb.asia-southeast1.firebasedatabase.app"
-    };
+    const REPO_URL = `https://github.com/${CONFIG.GITHUB_USER}/${CONFIG.REPO_NAME}`;
+    const STORAGE_KEY = "pungnap_portfolio1_passes";
+    const LOGIN_KEY = "pungnap_portfolio1_login";
 
-    const FIREBASE_READY =
-      window.firebase &&
-      firebaseConfig.apiKey &&
-      !String(firebaseConfig.apiKey).includes("YOUR_");
-
-    let auth = null;
-    let db = null;
-    let rtdb = null;
-    let currentUser = null;
-    let chatBound = false;
-
-    if (FIREBASE_READY) {
-      firebase.initializeApp(firebaseConfig);
-      auth = firebase.auth();
-      db = firebase.firestore();
-      rtdb = firebase.database();
+    function setLogos(){
+      document.getElementById("loginLogo").src = CONFIG.LOGO_URL;
+      document.getElementById("brandLogo").src = CONFIG.LOGO_URL;
+      document.getElementById("heroLogo").src = CONFIG.LOGO_URL;
     }
 
-    function qs(id){ return document.getElementById(id); }
-    function esc(v){ return String(v || "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m])); }
-    function two(n){ return String(n).padStart(2, "0"); }
-    function fmt(ts){
-      const d = new Date(ts);
-      return d.getFullYear()+"-"+two(d.getMonth()+1)+"-"+two(d.getDate())+" "+two(d.getHours())+":"+two(d.getMinutes());
-    }
-    function allowedEmail(email){
-      if (!email) return false;
-      return APP_INFO.allowedDomains.some(d => email.toLowerCase().endsWith("@" + d.replace("@","").toLowerCase()));
-    }
-    function localGet(key){
-      try { return JSON.parse(localStorage.getItem(key) || "[]"); } catch(e){ return []; }
-    }
-    function localSet(key, value){
-      localStorage.setItem(key, JSON.stringify(value));
+    function setLinks(){
+      const repoLink = document.getElementById("repoLink");
+      const deployLink = document.getElementById("deployLink");
+      repoLink.href = REPO_URL;
+      repoLink.textContent = REPO_URL;
+      deployLink.href = CONFIG.DEPLOY_URL;
+      deployLink.textContent = CONFIG.DEPLOY_URL;
     }
 
-    function setMeta(){
-      qs("repoLink").href = APP_INFO.repoUrl;
-      qs("repoLink").textContent = APP_INFO.repoUrl;
-      qs("deployLink").href = APP_INFO.deployUrl;
-      qs("deployLink").textContent = APP_INFO.deployUrl;
-      qs("backendBadge").textContent = FIREBASE_READY ? "Firebase 연동 모드" : "시연 모드";
-      qs("backendText").textContent = FIREBASE_READY
-        ? "Authentication + Firestore + Realtime Database 사용"
-        : "Firebase 미설정 시 LocalStorage 시연 모드로 동작";
+    function fillDemo(){
+      document.getElementById("loginEmail").value = "teacher@sen.go.kr";
     }
 
-    function showApp(user){
-      currentUser = user;
-      qs("authScreen").classList.add("hidden");
-      qs("appShell").classList.remove("hidden");
-      qs("userInfo").textContent = (user.displayName || "사용자") + " / " + (user.email || "demo@local");
-      loadPassHistory();
-      bindHelperChat();
-    }
-
-    function showAuth(){
-      qs("appShell").classList.add("hidden");
-      qs("authScreen").classList.remove("hidden");
-    }
-
-    async function login(){
-      if (!FIREBASE_READY) {
-        showApp({ displayName: "김규태(시연)", email: "demo@school.local" });
+    function login(){
+      const email = document.getElementById("loginEmail").value.trim();
+      if(!email || !email.includes("@")){
+        alert("Google 계정 이메일을 입력해주세요.");
         return;
       }
-      try {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        provider.setCustomParameters({ prompt: "select_account" });
-        const result = await auth.signInWithPopup(provider);
-        if (!allowedEmail(result.user.email)) {
-          await auth.signOut();
-          alert("허용된 학교/교육청 계정으로만 접속할 수 있습니다.");
-          return;
-        }
-        await db.collection("portfolio1_accessLogs").add({
-          email: result.user.email,
-          name: result.user.displayName || "",
-          createdAtMs: Date.now()
-        });
-        showApp(result.user);
-      } catch (e) {
-        alert("로그인 중 오류가 발생했습니다: " + e.message);
+      const domain = email.split("@")[1].toLowerCase();
+      if(!CONFIG.ALLOWED_DOMAINS.includes(domain)){
+        alert("시연용 기준 허용 도메인은 @sen.go.kr, @school.kr, @edu.sen.go.kr 입니다.");
+        return;
       }
+      sessionStorage.setItem(LOGIN_KEY, email);
+      openApp(email);
     }
 
-    async function logout(){
-      if (FIREBASE_READY && auth) {
-        await auth.signOut();
-      }
-      showAuth();
+    function logout(){
+      sessionStorage.removeItem(LOGIN_KEY);
+      document.getElementById("appScreen").classList.add("hidden");
+      document.getElementById("loginScreen").classList.remove("hidden");
     }
 
-    async function issuePass(){
-      const studentName = qs("studentName").value.trim();
-      const gradeClass = qs("gradeClass").value.trim();
-      const requestType = qs("requestType").value;
-      const requestDate = qs("requestDate").value;
-      const reason = qs("reason").value.trim();
+    function openApp(email){
+      document.getElementById("loginScreen").classList.add("hidden");
+      document.getElementById("appScreen").classList.remove("hidden");
+      document.getElementById("userPill").textContent = `인증 계정: ${email}`;
+      if(!document.getElementById("requestTime").value){
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        document.getElementById("requestTime").value = now.toISOString().slice(0,16);
+      }
+      renderHistory();
+      initChat();
+    }
 
-      if (!studentName || !gradeClass || !requestDate || !reason) {
+    function getHistory(){
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    }
+
+    function saveHistory(items){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    }
+
+    function issuePass(){
+      const name = document.getElementById("studentName").value.trim();
+      const cls = document.getElementById("studentClass").value.trim();
+      const type = document.getElementById("requestType").value;
+      const time = document.getElementById("requestTime").value;
+      const reason = document.getElementById("requestReason").value.trim();
+
+      if(!name || !cls || !time || !reason){
         alert("모든 항목을 입력해주세요.");
         return;
       }
 
       const passNo = "PN-" + Date.now().toString().slice(-8);
-      const record = {
-        passNo,
-        studentName,
-        gradeClass,
-        requestType,
-        requestDate,
-        reason,
-        createdBy: currentUser ? (currentUser.displayName || currentUser.email) : "시연 사용자",
-        createdAtMs: Date.now()
-      };
+      const item = { passNo, name, cls, type, time, reason, createdAt: new Date().toLocaleString("ko-KR") };
+      const list = getHistory();
+      list.unshift(item);
+      saveHistory(list.slice(0, 10));
 
-      if (FIREBASE_READY) {
-        await db.collection("portfolio1_passes").add(record);
-      } else {
-        const arr = localGet("p1_passes");
-        arr.unshift(record);
-        localSet("p1_passes", arr.slice(0, 20));
-      }
-
-      qs("passResult").classList.remove("hidden");
-      qs("passResult").innerHTML = `
+      const result = document.getElementById("issueResult");
+      result.style.display = "block";
+      result.innerHTML = `
         <strong>발급 완료</strong><br>
-        발급번호: ${esc(passNo)}<br>
-        학생: ${esc(studentName)} / ${esc(gradeClass)}<br>
-        유형: ${esc(requestType)} / 일시: ${esc(requestDate)}<br>
-        사유: ${esc(reason)}
+        발급번호: ${passNo}<br>
+        학생: ${name} / ${cls}<br>
+        유형: ${type} / 시간: ${time.replace("T"," ")}<br>
+        사유: ${reason}
+        <div class="qr-box">서울풍납초등학교 디지털 패스</div>
       `;
 
-      qs("studentName").value = "";
-      qs("gradeClass").value = "";
-      qs("reason").value = "";
-      loadPassHistory();
+      document.getElementById("studentName").value = "";
+      document.getElementById("studentClass").value = "";
+      document.getElementById("requestReason").value = "";
+      renderHistory();
     }
 
-    async function loadPassHistory(){
-      let rows = [];
-      if (FIREBASE_READY) {
-        const snap = await db.collection("portfolio1_passes").orderBy("createdAtMs", "desc").limit(8).get();
-        rows = snap.docs.map(doc => doc.data());
-      } else {
-        rows = localGet("p1_passes");
+    function renderHistory(){
+      const list = getHistory();
+      const ul = document.getElementById("historyList");
+      if(!list.length){
+        ul.innerHTML = "<li>아직 발급 기록이 없습니다.</li>";
+        return;
       }
-      qs("historyList").innerHTML = rows.length
-        ? rows.map(r => `<li><strong>${esc(r.passNo)}</strong> | ${esc(r.studentName)} (${esc(r.gradeClass)}) / ${esc(r.requestType)} / ${esc(r.requestDate)}<br><span style="color:#64748b">${esc(r.reason)}</span></li>`).join("")
-        : "<li>아직 발급 내역이 없습니다.</li>";
+      ul.innerHTML = list.map(item => `
+        <li>
+          <strong>${item.passNo}</strong> · ${item.name} (${item.cls}) · ${item.type}<br>
+          ${item.time.replace("T"," ")}<br>
+          <span style="color:#64748b;">${item.reason}</span>
+        </li>
+      `).join("");
     }
 
-    function helperReply(text){
-      const t = text.toLowerCase();
-      if (t.includes("조퇴") && t.includes("외출")) {
-        return "조퇴는 남은 수업을 마치지 않고 귀가하는 경우이고, 외출은 일정 시간 후 다시 복귀할 수 있는 경우로 안내할 수 있습니다.";
-      }
-      if (t.includes("승인")) {
-        return "이 시연 버전에서는 입력 후 즉시 발급되도록 구성했습니다. 실제 운영 버전에서는 승인 절차를 추가할 수 있습니다.";
-      }
-      if (t.includes("기록") || t.includes("저장")) {
-        return "발급 버튼을 누르면 최근 발급 내역에 저장됩니다. Firebase를 연결하면 실시간 데이터로 관리할 수 있습니다.";
-      }
-      return "입력란을 채운 뒤 '패스 발급 및 저장' 버튼을 누르시면 됩니다. 궁금한 사용 절차가 있으면 더 질문해주세요.";
+    let chatInitialized = false;
+
+    function initChat(){
+      if(chatInitialized) return;
+      chatInitialized = true;
+      const chatBox = document.getElementById("chatBox");
+      chatBox.innerHTML = `
+        <div class="chat-msg chat-ai"><strong>AI 도우미</strong><br>안녕하세요. 스마트 조퇴·외출증 시스템입니다. 사용 방법이나 입력 항목이 궁금하면 질문해주세요.</div>
+      `;
     }
 
-    function bindHelperChat(){
-      if (chatBound) return;
-      chatBound = true;
-
-      if (FIREBASE_READY) {
-        rtdb.ref("portfolio1_helperChat").limitToLast(30).on("value", snap => {
-          const items = [];
-          snap.forEach(child => items.push(child.val()));
-          renderChat(items);
-        });
-      } else {
-        renderChat(localGet("p1_chat"));
+    function replyByRule(text){
+      const q = text.toLowerCase();
+      if(q.includes("조퇴") && q.includes("외출")){
+        return "조퇴는 남은 수업을 마치지 않고 귀가하는 경우이고, 외출은 일정 시간 후 학교로 복귀할 수 있는 경우를 의미하도록 설계했습니다.";
       }
-    }
-
-    function renderChat(items){
-      items.sort((a,b) => a.ts - b.ts);
-      qs("chatLog").innerHTML = items.length
-        ? items.map(item => `
-          <div class="msg ${item.role === 'user' ? 'me' : 'bot'}">
-            <strong>${esc(item.author)}</strong><br>
-            ${esc(item.text)}
-            <small>${fmt(item.ts)}</small>
-          </div>
-        `).join("")
-        : `<div class="msg bot"><strong>AI 도우미</strong><br>안녕하세요. 사용법이 궁금하시면 질문해주세요.</div>`;
-      qs("chatLog").scrollTop = qs("chatLog").scrollHeight;
-    }
-
-    function addChat(item){
-      if (FIREBASE_READY) {
-        rtdb.ref("portfolio1_helperChat").push(item);
-      } else {
-        const arr = localGet("p1_chat");
-        arr.push(item);
-        localSet("p1_chat", arr.slice(-30));
-        renderChat(arr.slice(-30));
+      if(q.includes("기록") || q.includes("저장")){
+        return "발급 후 왼쪽 아래의 최근 발급 기록 목록에서 바로 확인할 수 있습니다. 현재는 브라우저 저장 기반 시연형입니다.";
       }
+      if(q.includes("입력") || q.includes("항목")){
+        return "학생 이름, 학급, 신청 유형, 요청 시간, 사유를 입력하면 발급됩니다.";
+      }
+      if(q.includes("승인")){
+        return "현재 버전은 시연용이라 즉시 발급 구조이며, 실제 운영용으로는 담임 승인 단계를 추가할 수 있습니다.";
+      }
+      return "입력란을 모두 작성한 뒤 ‘조퇴·외출증 발급’ 버튼을 누르면 됩니다. 필요한 기능은 승인 절차, 보호자 문자 전송, 관리자 통계로 확장할 수 있습니다.";
     }
 
-    function sendHelperChat(){
-      const text = qs("chatInput").value.trim();
-      if (!text) return;
-
-      addChat({
-        role: "user",
-        author: currentUser ? (currentUser.displayName || currentUser.email) : "시연 사용자",
-        text,
-        ts: Date.now()
-      });
-
-      qs("chatInput").value = "";
-
+    function sendChat(){
+      const input = document.getElementById("chatInput");
+      const text = input.value.trim();
+      if(!text) return;
+      const chatBox = document.getElementById("chatBox");
+      chatBox.innerHTML += `<div class="chat-msg chat-user"><strong>나</strong><br>${text}</div>`;
+      input.value = "";
       setTimeout(() => {
-        addChat({
-          role: "bot",
-          author: "AI 도우미",
-          text: helperReply(text),
-          ts: Date.now()
-        });
-      }, 500);
+        chatBox.innerHTML += `<div class="chat-msg chat-ai"><strong>AI 도우미</strong><br>${replyByRule(text)}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 300);
+      chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    qs("loginBtn").addEventListener("click", login);
-    qs("logoutBtn").addEventListener("click", logout);
-    setMeta();
+    setLogos();
+    setLinks();
 
-    if (FIREBASE_READY) {
-      auth.onAuthStateChanged(user => {
-        if (user && allowedEmail(user.email)) {
-          showApp(user);
-        } else {
-          showAuth();
-        }
-      });
+    const savedLogin = sessionStorage.getItem(LOGIN_KEY);
+    if(savedLogin){
+      openApp(savedLogin);
     }
   </script>
 </body>
 </html>
-
