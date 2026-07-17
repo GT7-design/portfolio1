@@ -566,6 +566,27 @@
       sessionStorage.setItem(LOGIN_KEY, email);
       openApp(email);
     }
+    async function login() {
+  try {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: "select_account" });
+
+    const result = await auth.signInWithPopup(provider);
+    const user = result.user;
+
+    if (!user || !user.email) {
+      alert("로그인 정보를 확인할 수 없습니다.");
+      return;
+    }
+
+    document.getElementById("loginScreen").classList.add("hidden");
+    document.getElementById("appScreen").classList.remove("hidden");
+    document.getElementById("userPill").textContent = `인증 계정: ${user.email}`;
+  } catch (error) {
+    alert("로그인 중 오류가 발생했습니다: " + error.message);
+  }
+}
+
 
     function logout(){
       sessionStorage.removeItem(LOGIN_KEY);
