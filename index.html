@@ -1018,34 +1018,49 @@
       `;
     }
 
-    function replyByRule(text) {
-      const q = text.toLowerCase();
-      if (q.includes("조퇴") && q.includes("외출")) {
-        return "조퇴는 남은 수업을 마치지 않고 귀가하는 경우이고, 외출은 일정 시간 후 학교로 복귀할 수 있는 경우를 의미하도록 설계했습니다.";
+    let GEMINI_API_KEY = ""; // 여기에 API 키를 입력하거나, 아래에서 프롬프트로 입력받습니다.
+
+    async function fetchGeminiResponse(text) {
+      if (!GEMINI_API_KEY) {
+        GEMINI_API_KEY = prompt("Gemini API 키를 입력해주세요 (테스트용):");
+        if (!GEMINI_API_KEY) return "API 키가 필요합니다. 새로고침 후 다시 시도해주세요.";
       }
-      if (q.includes("기록") || q.includes("저장")) {
-        return "발급된 데이터는 Firebase Firestore에 안전하게 저장되며, 왼쪽 아래의 최근 발급 기록 목록에서 실시간으로 확인할 수 있습니다.";
+      try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: text }] }]
+          })
+        });
+        const data = await response.json();
+        return data.candidates[0].content.parts[0].text;
+      } catch (error) {
+        console.error("Gemini API Error:", error);
+        return "오류가 발생했습니다. API 키나 네트워크 상태를 확인해주세요.";
       }
-      if (q.includes("입력") || q.includes("항목")) {
-        return "학생 이름, 학급, 신청 유형, 요청 시간, 사유를 입력하면 발급됩니다.";
-      }
-      if (q.includes("승인")) {
-        return "현재 버전은 즉시 발급 구조이며, 실제 운영용으로는 담임 승인 단계를 추가할 수 있습니다.";
-      }
-      return "입력란을 모두 작성한 뒤 ‘조퇴·외출증 발급’ 버튼을 누르면 됩니다.";
     }
 
-    window.sendChat = function () {
+    window.sendChat = async function () {
       const input = document.getElementById("chatInput");
       const text = input.value.trim();
       if (!text) return;
       const chatBox = document.getElementById("chatBox");
       chatBox.innerHTML += `<div class="chat-msg chat-user"><strong>나</strong><br>${text}</div>`;
       input.value = "";
-      setTimeout(() => {
-        chatBox.innerHTML += `<div class="chat-msg chat-ai"><strong>AI 도우미</strong><br>${replyByRule(text)}</div>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }, 300);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      const loadingId = "loading-" + Date.now();
+      chatBox.innerHTML += `<div id="${loadingId}" class="chat-msg chat-ai"><strong>AI 도우미</strong><br>답변을 생성중입니다...</div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      const aiResponse = await fetchGeminiResponse(text);
+      
+      document.getElementById(loadingId).remove();
+      const formattedResponse = aiResponse.replace(/\n/g, "<br>");
+      chatBox.innerHTML += `<div class="chat-msg chat-ai"><strong>AI 도우미</strong><br>${formattedResponse}</div>`;
       chatBox.scrollTop = chatBox.scrollHeight;
     };
 
